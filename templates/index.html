@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<form method="POST" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input type="submit" name="Submit">
-</form>
+<div class="search_form">
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" name="Submit">
+         <button class="btn default-btn"><a href="/request"> Go to search</a></button>
+    </form>
+</div>
 
 {{message}}
 {% endblock %}

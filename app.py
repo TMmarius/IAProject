@@ -32,9 +32,35 @@ def index():
 def search():
     content = ''
     if request.method == "POST":
-        content = mainFile.a('xmlCollection', request.form['point'])
+        choise = request.form['exercise']
+        if choise == "a":
+            tag = request.form['tag']
+            content = mainFile.a('xmlCollection', tag)
+        if choise == "b":
+            tag = request.form['tag']
+            tags = tag.split()
+            if len(tags) != 2:
+                content = ["wrong input try 'tag keyword' with space"]
+            else:
+                content = mainFile.b('xmlCollection', tags[0], tags[1])
+        if choise == "c":
+            count = int(request.form['tag'])
+            print(count)
+            content = mainFile.c('xmlCollection', count)
+        if choise == "d":
+            depth = int(request.form['tag'])
+            print(depth)
+            content = mainFile.d('xmlCollection', depth)
+
     return render_template('search.html', content=content)
 
 
+@app.route("/read/<string:file_name>")
+def read_file(file_name):
+    content = open("xmlCollection/" + file_name).read()
+    print(content)
+    return "<pre><xmp>" + content + "<xmp></pre>"
+
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
