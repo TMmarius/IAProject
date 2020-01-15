@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<form method="POST" enctype="multipart/form-data">
+    <input type="text" name="point">
+    <input type="submit" name="Submit">
+</form>
+
+{{content}}
+{% endblock %}
