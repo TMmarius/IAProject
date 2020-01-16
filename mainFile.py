@@ -7,6 +7,11 @@ b_store = defaultdict(list)
 c_store = defaultdict(list)
 d_store = defaultdict(list)
 
+c_content_store_max = defaultdict(int)
+c_content_store_min = defaultdict(int)
+d_content_store_max = defaultdict(int)
+d_content_store_min = defaultdict(int)
+
 
 # Toate documentele care conțin elementul(tag-ul) “document”
 def a(collection_path, tag_name):
@@ -56,10 +61,23 @@ def c(collection_path, elem_count):
     if len(c_store[elem_count]):
         return c_store[elem_count]
     for file_name in os.listdir(collection_path):
+
+        # dont search in file if we already has some data
+        if c_content_store_max[file_name] >= elem_count >= c_content_store_min[file_name]:
+            answer.append(file_name)
+            c_store[elem_count].append(file_name)
+            continue
+
         root = etree.parse(collection_path + "/" + file_name).getroot()
         if len(root.findall(".//")) >= elem_count:
             answer.append(file_name)
             c_store[elem_count].append(file_name)
+
+            if c_content_store_min[file_name] > elem_count:
+                c_content_store_min[file_name] = elem_count
+            if c_content_store_max[file_name] < elem_count:
+                c_content_store_max[file_name] = elem_count
+
     c_store[elem_count].append("this data is from store")
     return answer
 
@@ -84,10 +102,22 @@ def d(collection_path, depth):
         return d_store[depth]
 
     for file_name in os.listdir(collection_path):
+
+        if d_content_store_max[file_name] >= depth >= d_content_store_min[file_name]:
+            answer.append(file_name)
+            d_store[depth].append(file_name)
+            continue
+
         root = etree.parse(collection_path + "/" + file_name).getroot()
         if node_ident(root, depth):
             answer.append(file_name)
             d_store[depth].append(file_name)
+
+            if d_content_store_min[file_name] > depth:
+                d_content_store_min[file_name] = depth
+            if d_content_store_max[file_name] < depth:
+                d_content_store_max[file_name] = depth
+
     d_store[depth].append("this data is from store")
     return answer
 #
