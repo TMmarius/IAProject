@@ -1,7 +1,9 @@
 import os
 from flask import Flask, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
+from collections import defaultdict
 import mainFile
+
 
 UPLOAD_FOLDER = "xmlCollection"
 ALLOWED_EXTENSIONS = {'xml'}
@@ -22,6 +24,11 @@ def index():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             file.close()
+            # reset sored data for all files
+            mainFile.a_store = defaultdict(list)
+            mainFile.b_store = defaultdict(list)
+            mainFile.c_store = defaultdict(list)
+            mainFile.d_store = defaultdict(list)
             return render_template('index.html', message="uploaded with success")
         return render_template('index.html', message="not uploaded")
 

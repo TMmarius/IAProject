@@ -30,6 +30,7 @@ def a(collection_path, tag_name):
 # Toate documentele care conțin cuvântul “proiect” sub elementul “word”.
 def b(collection_path, tag_name, tag_content):
     answer = []
+    frecvency = {}
 
     if len(b_store[tag_name + "_" + tag_content]):
         return b_store[tag_name + "_" + tag_content]
@@ -37,8 +38,11 @@ def b(collection_path, tag_name, tag_content):
     for file_name in os.listdir(collection_path):
         root = etree.parse(collection_path + "/" + file_name).getroot()
         for element in root.findall(".//" + tag_name):
-            if element.text == tag_content:
+            if element.text.find(tag_content):
+                if file_name in frecvency:
+                    continue
                 answer.append(file_name)
+                frecvency[file_name] = True
                 b_store[tag_name + "_" + tag_content].append(file_name)
                 continue
     b_store[tag_name + "_" + tag_content].append("this data is from store")
